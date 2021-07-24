@@ -11,6 +11,7 @@ import {
   Scene,
   SphereGeometry,
   SpotLight,
+  TextureLoader,
   WebGLRenderer
 } from 'three';
 import { defineComponent, onMounted } from 'vue';
@@ -27,10 +28,14 @@ export default defineComponent({
     const renderer: WebGLRenderer = new WebGLRenderer();
     renderer.setSize(width, height);
 
-    const geometry: SphereGeometry = new SphereGeometry(2, 32, 32);
-    const material: MeshPhongMaterial = new MeshPhongMaterial({ color: 0x4080ff, dithering: true });
-    const cube: Mesh<SphereGeometry, MeshPhongMaterial> = new Mesh(geometry, material);
-    scene.add(cube);
+    let cube: Mesh<SphereGeometry, MeshPhongMaterial> | undefined;
+    const loader: TextureLoader = new TextureLoader();
+    loader.load('textures/world-map.jpg', (texture) => {
+      const geometry: SphereGeometry = new SphereGeometry(2.5, 32, 32);
+      const material: MeshPhongMaterial = new MeshPhongMaterial({ map: texture, dithering: true });
+      cube = new Mesh(geometry, material);
+      scene.add(cube);
+    });
 
     const ambient: AmbientLight = new AmbientLight(0xffffff, 0.1);
     scene.add(ambient);
@@ -55,7 +60,9 @@ export default defineComponent({
     function animate(): void {
       requestAnimationFrame(animate);
 
-      cube.rotation.y -= 0.001;
+      if (cube) {
+        cube.rotation.y -= 0.001;
+      }
 
       renderer.render(scene, camera);
     }
