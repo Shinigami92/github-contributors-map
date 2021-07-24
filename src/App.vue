@@ -61,7 +61,7 @@ interface RepositoryResponse {
 export default defineComponent({
   name: 'App',
   setup() {
-    const githubToken: Ref<string> = ref(import.meta.env.VITE_GITHUB_TOKEN as string);
+    const githubToken: Ref<string> = ref('');
     const repoOwner: Ref<string> = ref('vitejs');
     const repoName: Ref<string> = ref('vite');
 
