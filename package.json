@@ -1,0 +1,56 @@
+{
+  "name": "github-contributors-map",
+  "version": "1.0.0-alpha.1",
+  "description": "A world map that shows contributors of a given GitHub repository",
+  "private": true,
+  "scripts": {
+    "clean": "rm -Rf yarn.lock node_modules",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview --base /github-contributors-map/",
+    "serve": "vite",
+    "format": "prettier --write .",
+    "lint": "eslint ."
+  },
+  "keywords": [
+    "github",
+    "map"
+  ],
+  "author": {
+    "name": "Christopher Quadflieg",
+    "email": "chrissi92@hotmail.de",
+    "url": "https://github.com/Shinigami92"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Shinigami92/github-contributors-map.git"
+  },
+  "bugs": "https://github.com/Shinigami92/github-contributors-map/issues",
+  "license": "MIT",
+  "dependencies": {
+    "vue": "~3.1.5"
+  },
+  "devDependencies": {
+    "@prettier/plugin-pug": "~1.16.1",
+    "@types/node": "~16.4.1",
+    "@typescript-eslint/eslint-plugin": "~4.28.4",
+    "@typescript-eslint/parser": "~4.28.4",
+    "@vitejs/plugin-vue": "~1.2.5",
+    "@vue/compiler-sfc": "~3.1.5",
+    "@vue/eslint-config-prettier": "~6.0.0",
+    "@vue/eslint-config-typescript": "~7.0.0",
+    "eslint": "~7.31.0",
+    "eslint-config-prettier": "~8.3.0",
+    "eslint-define-config": "~1.0.9",
+    "eslint-import-resolver-typescript": "~2.4.0",
+    "eslint-plugin-import": "~2.23.4",
+    "eslint-plugin-prettier": "~3.4.0",
+    "eslint-plugin-vue": "~7.14.0",
+    "prettier": "~2.3.2",
+    "prettier-plugin-organize-imports": "~2.3.3",
+    "sass": "~1.36.0",
+    "typescript": "~4.3.5",
+    "vite": "~2.4.3",
+    "vite-plugin-windicss": "~1.2.5",
+    "vue-tsc": "~0.2.2"
+  }
+}
