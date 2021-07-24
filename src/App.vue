@@ -2,6 +2,8 @@
 h1 GitHub Contributors Map
 div
   form
+    label(for="personal-github-token") Your GitHub Token:
+    input#personal-github-token(v-model="githubToken", name="personal-github-token")
     label(for="repo-owner") Repository Owner:
     input#repo-owner(v-model="repoOwner", name="repo-owner", placeholder="owner")
     label(for="repo-name") Repository Name:
@@ -37,8 +39,6 @@ import { graphql } from 'https://cdn.skypack.dev/@octokit/graphql';
 import type { Ref } from 'vue';
 import { defineComponent, ref, watch } from 'vue';
 
-const TOKEN: string = import.meta.env.VITE_GITHUB_TOKEN as string;
-
 interface RepositoryResponse {
   repository: {
     collaborators: {
@@ -61,6 +61,7 @@ interface RepositoryResponse {
 export default defineComponent({
   name: 'App',
   setup() {
+    const githubToken: Ref<string> = ref(import.meta.env.VITE_GITHUB_TOKEN as string);
     const repoOwner: Ref<string> = ref('vitejs');
     const repoName: Ref<string> = ref('vite');
 
@@ -69,7 +70,7 @@ export default defineComponent({
     const errorMessage: Ref<string | undefined> = ref();
 
     watch(
-      [repoOwner, repoName],
+      [githubToken, repoOwner, repoName],
       async () => {
         collaborators.value = [];
         errorMessage.value = undefined;
@@ -112,7 +113,7 @@ export default defineComponent({
             `,
             {
               headers: {
-                authorization: `token ${TOKEN}`
+                authorization: `token ${githubToken.value}`
               },
               repoOwner: repoOwner.value,
               repoName: repoName.value
@@ -128,7 +129,7 @@ export default defineComponent({
       { immediate: true }
     );
 
-    return { repoOwner, repoName, collaborators, errorMessage };
+    return { githubToken, repoOwner, repoName, collaborators, errorMessage };
   }
 });
 </script>
