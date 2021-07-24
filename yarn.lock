@@ -185,6 +185,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.4.1.tgz#9fad171a5b701613ee8a6f4ece3c88b1034b1b03"
   integrity sha512-UW7cbLqf/Wu5XH2RKKY1cHwUNLicIDRLMraYKz+HHAerJ0ZffUEk+fMnd8qU2JaS6cAy0r8tsaf7yqHASf/Y0Q==
 
+"@types/three@~0.130.1":
+  version "0.130.1"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.130.1.tgz#e5c9aadca684ca3da8daf64e8284bd1a9df2fcc8"
+  integrity sha512-FlCR3CxQHxCmjI0ZCG59O/E15bV+bx7XRO+nJ7RY8KBg2pEF/52frmV/uh9SrLd+ORx+7Zc7NxnJm5Kj4xS9Sg==
+
 "@types/throttle-debounce@^2.1.0":
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/@types/throttle-debounce/-/throttle-debounce-2.1.0.tgz#1c3df624bfc4b62f992d3012b84c56d41eab3776"
@@ -2349,6 +2354,11 @@ text-table@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/text-table/-/text-table-0.2.0.tgz#7f5ee823ae805207c00af2df4a84ec3fcfa570b4"
   integrity sha1-f17oI66AUgfACvLfSoTsP8+lcLQ=
+
+three@~0.130.1:
+  version "0.130.1"
+  resolved "https://registry.yarnpkg.com/three/-/three-0.130.1.tgz#797588b2877ace31603bbbc864eb2e3022f0b3b4"
+  integrity sha512-OSPPKcGvFSiGkG3jFrwwC76PBV/ZSrGxpBbg28bW8s9GU8r/y2spNGtEXHEb/CVqo0Ctf5Lx2rVaxQZB6OasaA==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"

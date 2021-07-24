@@ -10,6 +10,7 @@ div
     input#repo-name(v-model="repoName", name="repo-name", placeholder="name")
 template(v-if="!errorMessage")
   h2 Collaborators
+  ThreeCanvas
   table
     thead
       tr
@@ -35,6 +36,7 @@ template(v-else)
 </template>
 
 <script lang="ts">
+import ThreeCanvas from '@/components/ThreeCanvas.vue';
 import type { User } from '@/shared/User';
 // eslint-disable-next-line import/no-unresolved
 import { graphql } from 'https://cdn.skypack.dev/@octokit/graphql';
@@ -62,6 +64,7 @@ interface RepositoryResponse {
 
 export default defineComponent({
   name: 'App',
+  components: { ThreeCanvas },
   setup() {
     const githubToken: Ref<string> = ref('');
     const repoOwner: Ref<string> = ref('vitejs');
