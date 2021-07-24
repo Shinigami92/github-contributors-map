@@ -10,7 +10,7 @@ div
     input#repo-name(v-model="repoName", name="repo-name", placeholder="name")
 template(v-if="!errorMessage")
   h2 Collaborators
-  ThreeCanvas
+  ThreeCanvas(:users="collaborators")
   table
     thead
       tr
@@ -81,7 +81,7 @@ export default defineComponent({
       if (!location) {
         return undefined;
       }
-      console.log(location);
+      // console.log(location);
       let index: number = worldcitiesCsv.indexOf(location);
       // console.log({ index });
       if (index > 0) {
@@ -145,7 +145,7 @@ export default defineComponent({
               repoName: repoName.value
             }
           );
-          console.log(response);
+          // console.log(response);
           collaborators.value = response.repository.collaborators.nodes;
           for (const collaborator of collaborators.value) {
             collaborator.geolocation = findGeoLocation(collaborator);
@@ -161,7 +161,7 @@ export default defineComponent({
     onMounted(() => {
       import('@/assets/worldcities/worldcities.csv?raw').then((module) => {
         worldcitiesCsv = module.default;
-        console.log(worldcitiesCsv);
+        // console.log(worldcitiesCsv);
       });
     });
 
