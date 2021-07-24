@@ -1,3 +1,5 @@
+import type { Geolocation } from './Geolocation';
+
 export interface User {
   id: string;
   /** The username used to login. */
@@ -8,6 +10,7 @@ export interface User {
   avatarUrl: string;
   /** The user's public profile location. */
   location: string | null;
+  geolocation?: Geolocation;
   /** The HTTP URL for this user. */
   url: string;
 }
