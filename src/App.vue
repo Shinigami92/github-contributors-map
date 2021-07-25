@@ -150,7 +150,7 @@ export default defineComponent({
                     }
                     totalCount
                   }
-                  mentionableUsers(first: 10) {
+                  mentionableUsers(first: 100) {
                     nodes {
                       id
                       login
@@ -179,6 +179,14 @@ export default defineComponent({
           collaborators.value = response.repository.collaborators.nodes;
           for (const collaborator of collaborators.value) {
             collaborator.geolocation = findGeoLocation(collaborator);
+          }
+
+          const mentionableUsers: User[] = response.repository.mentionableUsers.nodes;
+          for (const mentionableUser of mentionableUsers) {
+            if (!collaborators.value.some((user) => user.id === mentionableUser.id)) {
+              mentionableUser.geolocation = findGeoLocation(mentionableUser);
+              collaborators.value.push(mentionableUser);
+            }
           }
         } catch (error) {
           console.error(error);
