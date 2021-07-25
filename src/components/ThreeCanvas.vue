@@ -127,7 +127,11 @@ export default defineComponent({
     animate();
 
     onMounted(() => {
-      document.getElementById('canvas')!.appendChild(renderer.domElement);
+      const canvasNode: HTMLElement | null = document.getElementById('canvas');
+      if (canvasNode) {
+        canvasNode.innerHTML = '';
+        canvasNode.appendChild(renderer.domElement);
+      }
     });
 
     return { rotationSpeed };
