@@ -3,7 +3,11 @@ h1 GitHub Contributors Map
 div
   form
     label(for="personal-github-token") Your GitHub Token:
-    input#personal-github-token(v-model="githubToken", name="personal-github-token")
+    input#personal-github-token(
+      v-model="githubToken",
+      name="personal-github-token",
+      placeholder="ghp_************************************"
+    )
     label(for="repo-owner") Repository Owner:
     input#repo-owner(v-model="repoOwner", name="repo-owner", placeholder="owner")
     label(for="repo-name") Repository Name:
