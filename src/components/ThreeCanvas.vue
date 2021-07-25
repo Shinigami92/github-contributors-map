@@ -3,7 +3,7 @@
 </template>
 
 <script lang="ts">
-import { User } from '@/shared/User';
+import type { User } from '@/shared/User';
 import {
   AmbientLight,
   CircleGeometry,
@@ -19,7 +19,8 @@ import {
   Vector3,
   WebGLRenderer
 } from 'three';
-import { defineComponent, onMounted, PropType, watch } from 'vue';
+import type { PropType } from 'vue';
+import { defineComponent, onMounted, watch } from 'vue';
 
 function calcPosFromLatLonRad(radius: number, lat: number, lng: number): Vector3 {
   const phi: number = (90 - lat) * (Math.PI / 180);

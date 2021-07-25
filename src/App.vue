@@ -37,11 +37,13 @@ template(v-else)
 
 <script lang="ts">
 import ThreeCanvas from '@/components/ThreeCanvas.vue';
+import type { Geolocation } from '@/shared/Geolocation';
 import type { User } from '@/shared/User';
+import type { WorldCity } from '@/shared/WorldCity';
 // eslint-disable-next-line import/no-unresolved
 import { graphql } from 'https://cdn.skypack.dev/@octokit/graphql';
-import { defineComponent, onMounted, Ref, ref, watch } from 'vue';
-import { Geolocation } from './shared/Geolocation';
+import type { Ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 
 interface RepositoryResponse {
   repository: {
@@ -62,6 +64,13 @@ interface RepositoryResponse {
   };
 }
 
+function logWorldCity(rank: number, user: User, worldCity: WorldCity): void {
+  console.log(
+    // eslint-disable-next-line max-len
+    `Found (${rank}): ${user.name}, "${user.location}" -> "${worldCity.city}", "${worldCity.adminName}", "${worldCity.country}" (${worldCity.lat}, ${worldCity.lng})`
+  );
+}
+
 export default defineComponent({
   name: 'App',
   components: { ThreeCanvas },
@@ -74,25 +83,46 @@ export default defineComponent({
 
     const errorMessage: Ref<string | undefined> = ref();
 
-    let worldcitiesCsv: string = '';
+    const worldCities: WorldCity[] = [];
 
     const findGeoLocation: (user: User) => Geolocation | undefined = (user) => {
+      let geoLocation: Geolocation | undefined = undefined;
       const { location } = user;
       if (!location) {
-        return undefined;
+        return geoLocation;
       }
-      // console.log(location);
-      let index: number = worldcitiesCsv.indexOf(location);
-      // console.log({ index });
-      if (index > 0) {
-        const startIndex: number = worldcitiesCsv.slice(0, index).lastIndexOf('\n');
-        const endIndex: number = worldcitiesCsv.indexOf('\n', index);
-        const line: string = worldcitiesCsv.slice(startIndex + 1, endIndex - 1);
-        const parts: string[] = line.split(',').map((cell) => cell.slice(1, -1));
-        // console.log({ startIndex, endIndex, line, lat, lng });
-        return { lat: Number(parts[2]), lng: Number(parts[3]) };
+
+      let rank: number = 999;
+
+      for (const worldCity of worldCities) {
+        if (worldCity.city === location && rank > 1) {
+          geoLocation = { lat: worldCity.lat, lng: worldCity.lng };
+          rank = 1;
+          logWorldCity(rank, user, worldCity);
+        } else if (worldCity.adminName === location && rank > 2) {
+          geoLocation = { lat: worldCity.lat, lng: worldCity.lng };
+          rank = 2;
+          logWorldCity(rank, user, worldCity);
+        } else if (worldCity.country === location && rank > 3) {
+          geoLocation = { lat: worldCity.lat, lng: worldCity.lng };
+          rank = 3;
+          logWorldCity(rank, user, worldCity);
+        } else if (location.includes(worldCity.city) && rank > 4) {
+          geoLocation = { lat: worldCity.lat, lng: worldCity.lng };
+          rank = 4;
+          logWorldCity(rank, user, worldCity);
+        } else if (worldCity.adminName && location.includes(worldCity.adminName) && rank > 5) {
+          geoLocation = { lat: worldCity.lat, lng: worldCity.lng };
+          rank = 5;
+          logWorldCity(rank, user, worldCity);
+        } else if (location.includes(worldCity.country) && rank > 6) {
+          geoLocation = { lat: worldCity.lat, lng: worldCity.lng };
+          rank = 6;
+          logWorldCity(rank, user, worldCity);
+        }
       }
-      return undefined;
+
+      return geoLocation;
     };
 
     watch(
@@ -159,8 +189,8 @@ export default defineComponent({
     );
 
     onMounted(() => {
-      import('@/assets/worldcities/worldcities.csv?raw').then((module) => {
-        worldcitiesCsv = module.default;
+      import('@/assets/worldcities.json').then((module) => {
+        worldCities.push(...module.default);
         // console.log(worldcitiesCsv);
       });
     });
