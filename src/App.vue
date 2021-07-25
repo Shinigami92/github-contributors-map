@@ -1,6 +1,15 @@
 <template lang="pug">
 h1 GitHub Contributors Map
 div
+  p
+    a(href="https://github.com/Shinigami92/github-contributors-map", target="_blank") GitHub Repo
+  p You need a GitHub private access token:
+    |
+    |
+    a(
+      href="https://github.com/settings/tokens/new?description=GitHub%20Contributors%20Map&scopes=public_repo",
+      target="_blank"
+    ) Generate a personal token
   form
     label(for="personal-github-token") Your GitHub Token:
     input#personal-github-token(
