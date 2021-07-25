@@ -41,8 +41,8 @@ export default defineComponent({
     users: { type: Array as PropType<User[]>, required: true }
   },
   setup(props) {
-    const width: number = 480;
-    const height: number = 360;
+    const width: number = 960;
+    const height: number = 540;
 
     const scene: Scene = new Scene();
     const camera: PerspectiveCamera = new PerspectiveCamera(75, width / height, 0.1, 1000);
