@@ -1,4 +1,12 @@
 <template lang="pug">
+label(for="rotation-speed") Rotation speed:
+input#rotation-speed(
+  v-model.number="rotationSpeed",
+  name="rotation-speed",
+  type="number",
+  placeholder="0.001",
+  step="0.0001"
+)
 #canvas
 </template>
 
@@ -19,8 +27,8 @@ import {
   Vector3,
   WebGLRenderer
 } from 'three';
-import type { PropType } from 'vue';
-import { defineComponent, onMounted, watch } from 'vue';
+import type { PropType, Ref } from 'vue';
+import { defineComponent, onMounted, ref, watch } from 'vue';
 
 function calcPosFromLatLonRad(radius: number, lat: number, lng: number): Vector3 {
   const phi: number = (90 - lat) * (Math.PI / 180);
@@ -101,15 +109,15 @@ export default defineComponent({
 
     camera.position.z = 5;
 
-    const rotationSpeed: number = 0.001;
+    const rotationSpeed: Ref<number> = ref(0.001);
     function animate(): void {
       requestAnimationFrame(animate);
 
       if (globe) {
-        parentObj.rotation.y -= rotationSpeed;
+        parentObj.rotation.y -= rotationSpeed.value;
         for (const child of parentObj.children) {
           if (child instanceof Mesh && child.geometry.type === 'CircleGeometry') {
-            child.rotation.y += rotationSpeed;
+            child.rotation.y += rotationSpeed.value;
           }
         }
       }
@@ -122,7 +130,7 @@ export default defineComponent({
       document.getElementById('canvas')!.appendChild(renderer.domElement);
     });
 
-    return {};
+    return { rotationSpeed };
   }
 });
 </script>
