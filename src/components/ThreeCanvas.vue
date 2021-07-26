@@ -86,7 +86,8 @@ export default defineComponent({
               parentObj.add(circle);
             });
           });
-      }
+      },
+      { deep: true }
     );
 
     const ambient: AmbientLight = new AmbientLight(0xffffff, 0.1);

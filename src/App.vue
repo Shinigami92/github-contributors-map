@@ -60,17 +60,11 @@ import { defineComponent, onMounted, ref, watch } from 'vue';
 
 interface RepositoryResponse {
   repository: {
-    collaborators: {
-      nodes: User[];
-      pageInfo: {
-        hasNextPage: boolean;
-      };
-      totalCount: number;
-    };
     mentionableUsers: {
       nodes: User[];
       pageInfo: {
         hasNextPage: boolean;
+        endCursor: string;
       };
       totalCount: number;
     };
@@ -145,62 +139,53 @@ export default defineComponent({
         errorMessage.value = undefined;
 
         try {
-          const response: RepositoryResponse = await graphql(
-            `
-              query ($repoOwner: String!, $repoName: String!) {
-                repository(owner: $repoOwner, name: $repoName) {
-                  collaborators {
-                    nodes {
-                      id
-                      login
-                      name
-                      avatarUrl
-                      location
-                      url
+          let hasNextPage: boolean = true;
+          let after: string | null = null;
+
+          do {
+            const response: RepositoryResponse = await graphql(
+              `
+                query ($repoOwner: String!, $repoName: String!, $after: String) {
+                  repository(owner: $repoOwner, name: $repoName) {
+                    mentionableUsers(first: 100, after: $after) {
+                      nodes {
+                        id
+                        login
+                        name
+                        avatarUrl
+                        location
+                        url
+                      }
+                      pageInfo {
+                        hasNextPage
+                        endCursor
+                      }
+                      totalCount
                     }
-                    pageInfo {
-                      hasNextPage
-                    }
-                    totalCount
-                  }
-                  mentionableUsers(first: 100) {
-                    nodes {
-                      id
-                      login
-                      name
-                      avatarUrl
-                      location
-                      url
-                    }
-                    pageInfo {
-                      hasNextPage
-                    }
-                    totalCount
                   }
                 }
+              `,
+              {
+                headers: {
+                  authorization: `token ${githubToken.value}`
+                },
+                repoOwner: repoOwner.value,
+                repoName: repoName.value,
+                after
               }
-            `,
-            {
-              headers: {
-                authorization: `token ${githubToken.value}`
-              },
-              repoOwner: repoOwner.value,
-              repoName: repoName.value
-            }
-          );
-          // console.log(response);
-          collaborators.value = response.repository.collaborators.nodes;
-          for (const collaborator of collaborators.value) {
-            collaborator.geolocation = findGeoLocation(collaborator);
-          }
+            );
 
-          const mentionableUsers: User[] = response.repository.mentionableUsers.nodes;
-          for (const mentionableUser of mentionableUsers) {
-            if (!collaborators.value.some((user) => user.id === mentionableUser.id)) {
-              mentionableUser.geolocation = findGeoLocation(mentionableUser);
-              collaborators.value.push(mentionableUser);
+            hasNextPage = response.repository.mentionableUsers.pageInfo.hasNextPage;
+            after = response.repository.mentionableUsers.pageInfo.endCursor;
+
+            const mentionableUsers: User[] = response.repository.mentionableUsers.nodes;
+            if (mentionableUsers.length > 0) {
+              for (const collaborator of mentionableUsers) {
+                collaborator.geolocation = findGeoLocation(collaborator);
+              }
+              collaborators.value.push(...mentionableUsers);
             }
-          }
+          } while (hasNextPage);
         } catch (error) {
           console.error(error);
           errorMessage.value = error.message;
