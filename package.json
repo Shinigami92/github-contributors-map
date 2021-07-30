@@ -48,7 +48,7 @@
     "eslint-import-resolver-typescript": "~2.4.0",
     "eslint-plugin-import": "~2.23.4",
     "eslint-plugin-prettier": "~3.4.0",
-    "eslint-plugin-vue": "~7.14.0",
+    "eslint-plugin-vue": "~7.15.0",
     "esno": "~0.8.0",
     "prettier": "~2.3.2",
     "prettier-plugin-organize-imports": "~2.3.3",
