@@ -53,10 +53,9 @@ import ThreeCanvas from '@/components/ThreeCanvas.vue';
 import type { Geolocation } from '@/shared/Geolocation';
 import type { User } from '@/shared/User';
 import type { WorldCity } from '@/shared/WorldCity';
-// eslint-disable-next-line import/no-unresolved
-import { graphql } from 'https://cdn.skypack.dev/@octokit/graphql';
 import type { Ref } from 'vue';
 import { defineComponent, onMounted, ref, watch } from 'vue';
+import useGitHub from './composables/useGitHub';
 
 interface RepositoryResponse {
   repository: {
@@ -85,6 +84,8 @@ export default defineComponent({
     const githubToken: Ref<string> = ref('');
     const repoOwner: Ref<string> = ref('vitejs');
     const repoName: Ref<string> = ref('vite');
+
+    const { getMentionableUsers } = useGitHub();
 
     const collaborators: Ref<User[]> = ref([]);
 
@@ -143,37 +144,12 @@ export default defineComponent({
           let after: string | null = null;
 
           do {
-            const response: RepositoryResponse = await graphql(
-              `
-                query ($repoOwner: String!, $repoName: String!, $after: String) {
-                  repository(owner: $repoOwner, name: $repoName) {
-                    mentionableUsers(first: 100, after: $after) {
-                      nodes {
-                        id
-                        login
-                        name
-                        avatarUrl
-                        location
-                        url
-                      }
-                      pageInfo {
-                        hasNextPage
-                        endCursor
-                      }
-                      totalCount
-                    }
-                  }
-                }
-              `,
-              {
-                headers: {
-                  authorization: `token ${githubToken.value}`
-                },
-                repoOwner: repoOwner.value,
-                repoName: repoName.value,
-                after
-              }
-            );
+            const response: RepositoryResponse = await getMentionableUsers({
+              owner: repoOwner.value,
+              name: repoName.value,
+              token: githubToken.value,
+              after
+            });
 
             hasNextPage = response.repository.mentionableUsers.pageInfo.hasNextPage;
             after = response.repository.mentionableUsers.pageInfo.endCursor;
