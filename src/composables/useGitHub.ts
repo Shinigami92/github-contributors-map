@@ -2,6 +2,22 @@ import type { User } from '@/shared/User';
 // eslint-disable-next-line import/no-unresolved
 import { graphql } from 'https://cdn.skypack.dev/@octokit/graphql';
 
+export interface SearchRepositoriesQueryParams {
+  search: string;
+  token: string;
+}
+
+export interface SearchRepositoriesResponse {
+  search: {
+    nodes: Array<{
+      id: string;
+      name: string;
+      owner: { login: string };
+      nameWithOwner: string;
+    }>;
+  };
+}
+
 export interface GetMentionableUsersQueryParams {
   owner: string;
   name: string;
@@ -23,10 +39,40 @@ export interface RepositoryResponse {
 }
 
 export interface UseGitHub {
-  getMentionableUsers(params: GetMentionableUsersQueryParams): Promise<RepositoryResponse>;
+  searchRepositories(queryParams: SearchRepositoriesQueryParams): Promise<SearchRepositoriesResponse>;
+  getMentionableUsers(queryParams: GetMentionableUsersQueryParams): Promise<RepositoryResponse>;
 }
 
 export default function useGitHub(): UseGitHub {
+  const searchRepositories: (queryParams: SearchRepositoriesQueryParams) => Promise<SearchRepositoriesResponse> = ({
+    search,
+    token
+  }) =>
+    graphql(
+      `
+        query searchRepositories($search: String!) {
+          search(type: REPOSITORY, query: $search, first: 5) {
+            nodes {
+              ... on Repository {
+                id
+                name
+                owner {
+                  login
+                }
+                nameWithOwner
+              }
+            }
+          }
+        }
+      `,
+      {
+        headers: {
+          authorization: `token ${token}`
+        },
+        search
+      }
+    );
+
   const getMentionableUsers: (queryParams: GetMentionableUsersQueryParams) => Promise<RepositoryResponse> = ({
     owner,
     name,
@@ -35,8 +81,8 @@ export default function useGitHub(): UseGitHub {
   }) =>
     graphql(
       `
-        query ($repoOwner: String!, $repoName: String!, $after: String) {
-          repository(owner: $repoOwner, name: $repoName) {
+        query getMentionableUsers($owner: String!, $name: String!, $after: String) {
+          repository(owner: $owner, name: $name) {
             mentionableUsers(first: 100, after: $after) {
               nodes {
                 id
@@ -65,5 +111,5 @@ export default function useGitHub(): UseGitHub {
       }
     );
 
-  return { getMentionableUsers };
+  return { searchRepositories, getMentionableUsers };
 }

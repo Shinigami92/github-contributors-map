@@ -10,17 +10,18 @@ div
       href="https://github.com/settings/tokens/new?description=GitHub%20Contributors%20Map&scopes=public_repo",
       target="_blank"
     ) Generate a personal token
-  form
+  form(@submit.prevent="submit")
     label(for="personal-github-token") Your GitHub Token:
     input#personal-github-token(
       v-model="githubToken",
       name="personal-github-token",
       placeholder="ghp_************************************"
     )
-    label(for="repo-owner") Repository Owner:
-    input#repo-owner(v-model="repoOwner", name="repo-owner", placeholder="owner")
-    label(for="repo-name") Repository Name:
-    input#repo-name(v-model="repoName", name="repo-name", placeholder="name")
+    label(for="search-repo") Search Repo:
+    input#search-repo(v-model="search", name="search-repo", placeholder="owner/name", list="repositories")
+    datalist#repositories
+      option(v-for="repository in repositories") {{ repository }}
+    button(type="submit") Search
 template(v-if="!errorMessage")
   h2 Collaborators
   ThreeCanvas(:users="collaborators")
@@ -54,21 +55,9 @@ import type { Geolocation } from '@/shared/Geolocation';
 import type { User } from '@/shared/User';
 import type { WorldCity } from '@/shared/WorldCity';
 import type { Ref } from 'vue';
-import { defineComponent, onMounted, ref, watch } from 'vue';
+import { computed, defineComponent, onMounted, ref, watch } from 'vue';
+import type { RepositoryResponse, SearchRepositoriesResponse } from './composables/useGitHub';
 import useGitHub from './composables/useGitHub';
-
-interface RepositoryResponse {
-  repository: {
-    mentionableUsers: {
-      nodes: User[];
-      pageInfo: {
-        hasNextPage: boolean;
-        endCursor: string;
-      };
-      totalCount: number;
-    };
-  };
-}
 
 function logWorldCity(rank: number, user: User, worldCity: WorldCity): void {
   console.log(
@@ -82,11 +71,14 @@ export default defineComponent({
   components: { ThreeCanvas },
   setup() {
     const githubToken: Ref<string> = ref('');
-    const repoOwner: Ref<string> = ref('vitejs');
-    const repoName: Ref<string> = ref('vite');
+    const search: Ref<string> = ref('vitejs/vite');
 
-    const { getMentionableUsers } = useGitHub();
+    const repoOwner: Ref<string> = computed(() => search.value.split('/')[0] ?? '');
+    const repoName: Ref<string> = computed(() => search.value.split('/')[1] ?? '');
 
+    const { searchRepositories, getMentionableUsers } = useGitHub();
+
+    const repositories: Ref<string[]> = ref([]);
     const collaborators: Ref<User[]> = ref([]);
 
     const errorMessage: Ref<string | undefined> = ref();
@@ -133,42 +125,66 @@ export default defineComponent({
       return geoLocation;
     };
 
-    watch(
-      [githubToken, repoOwner, repoName],
-      async () => {
-        collaborators.value = [];
-        errorMessage.value = undefined;
+    const submit: () => Promise<void> = async () => {
+      collaborators.value = [];
+      errorMessage.value = undefined;
 
-        try {
-          let hasNextPage: boolean = true;
-          let after: string | null = null;
+      if (!githubToken.value || !repoOwner.value || !repoName.value) {
+        return;
+      }
 
-          do {
-            const response: RepositoryResponse = await getMentionableUsers({
-              owner: repoOwner.value,
-              name: repoName.value,
-              token: githubToken.value,
-              after
-            });
+      try {
+        let hasNextPage: boolean = true;
+        let after: string | null = null;
+        const users: User[] = [];
 
-            hasNextPage = response.repository.mentionableUsers.pageInfo.hasNextPage;
-            after = response.repository.mentionableUsers.pageInfo.endCursor;
+        do {
+          const response: RepositoryResponse = await getMentionableUsers({
+            owner: repoOwner.value,
+            name: repoName.value,
+            token: githubToken.value,
+            after
+          });
 
-            const mentionableUsers: User[] = response.repository.mentionableUsers.nodes;
-            if (mentionableUsers.length > 0) {
-              for (const collaborator of mentionableUsers) {
-                collaborator.geolocation = findGeoLocation(collaborator);
-              }
-              collaborators.value.push(...mentionableUsers);
+          hasNextPage = response.repository.mentionableUsers.pageInfo.hasNextPage;
+          after = response.repository.mentionableUsers.pageInfo.endCursor;
+
+          const mentionableUsers: User[] = response.repository.mentionableUsers.nodes;
+          if (mentionableUsers.length > 0) {
+            for (const collaborator of mentionableUsers) {
+              collaborator.geolocation = findGeoLocation(collaborator);
             }
-          } while (hasNextPage);
-        } catch (error) {
-          console.error(error);
-          errorMessage.value = error.message;
-        }
-      },
-      { immediate: true }
-    );
+            users.push(...mentionableUsers);
+          }
+        } while (hasNextPage);
+
+        collaborators.value = users;
+      } catch (error) {
+        console.error(error);
+        errorMessage.value = error.message;
+      }
+    };
+
+    watch([githubToken, search], async ([tokenValue, searchValue]) => {
+      repositories.value = [];
+      errorMessage.value = undefined;
+
+      if (!tokenValue || !searchValue) {
+        return;
+      }
+
+      try {
+        const response: SearchRepositoriesResponse = await searchRepositories({
+          token: tokenValue,
+          search: searchValue
+        });
+
+        repositories.value = response.search.nodes.map((node) => node.nameWithOwner);
+      } catch (error) {
+        console.error(error);
+        errorMessage.value = error.message;
+      }
+    });
 
     onMounted(() => {
       import('@/assets/worldcities.json').then((module) => {
@@ -177,7 +193,7 @@ export default defineComponent({
       });
     });
 
-    return { githubToken, repoOwner, repoName, collaborators, errorMessage };
+    return { githubToken, search, repositories, collaborators, errorMessage, submit };
   }
 });
 </script>

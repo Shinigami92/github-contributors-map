@@ -72,6 +72,9 @@ export default defineComponent({
     watch(
       () => props.users,
       (users) => {
+        parentObj.clear();
+        parentObj.add(globe!);
+
         users
           .filter((user) => Boolean(user.geolocation))
           .forEach((user) => {
@@ -110,7 +113,7 @@ export default defineComponent({
 
     camera.position.z = 5;
 
-    const rotationSpeed: Ref<number> = ref(0.001);
+    const rotationSpeed: Ref<number> = ref(0.003);
     function animate(): void {
       requestAnimationFrame(animate);
 
