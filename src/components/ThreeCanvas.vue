@@ -52,6 +52,8 @@ export default defineComponent({
     const width: number = 960;
     const height: number = 540;
 
+    const rotationSpeed: Ref<number> = ref(0.003);
+
     const scene: Scene = new Scene();
     const camera: PerspectiveCamera = new PerspectiveCamera(75, width / height, 0.1, 1000);
 
@@ -72,6 +74,7 @@ export default defineComponent({
     watch(
       () => props.users,
       (users) => {
+        parentObj.rotation.y = 0;
         parentObj.clear();
         parentObj.add(globe!);
 
@@ -113,7 +116,6 @@ export default defineComponent({
 
     camera.position.z = 5;
 
-    const rotationSpeed: Ref<number> = ref(0.003);
     function animate(): void {
       requestAnimationFrame(animate);
 
