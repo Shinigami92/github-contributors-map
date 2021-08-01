@@ -24,6 +24,7 @@ div
     button(type="submit") Search
 template(v-if="!errorMessage")
   h2 Collaborators
+  FlatMap(:users="collaborators")
   ThreeCanvas(:users="collaborators")
   table
     thead
@@ -50,6 +51,7 @@ template(v-else)
 </template>
 
 <script lang="ts">
+import FlatMap from '@/components/FlatMap.vue';
 import ThreeCanvas from '@/components/ThreeCanvas.vue';
 import type { Geolocation } from '@/shared/Geolocation';
 import type { User } from '@/shared/User';
@@ -60,7 +62,7 @@ import type { RepositoryResponse, SearchRepositoriesResponse } from './composabl
 import useGitHub from './composables/useGitHub';
 
 function logWorldCity(rank: number, user: User, worldCity: WorldCity): void {
-  console.log(
+  console.debug(
     // eslint-disable-next-line max-len
     `Found (${rank}): ${user.name}, "${user.location}" -> "${worldCity.city}", "${worldCity.adminName}", "${worldCity.country}" (${worldCity.lat}, ${worldCity.lng})`
   );
@@ -68,7 +70,7 @@ function logWorldCity(rank: number, user: User, worldCity: WorldCity): void {
 
 export default defineComponent({
   name: 'App',
-  components: { ThreeCanvas },
+  components: { FlatMap, ThreeCanvas },
   setup() {
     const githubToken: Ref<string> = ref('');
     const search: Ref<string> = ref('vitejs/vite');
