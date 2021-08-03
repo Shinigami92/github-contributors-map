@@ -1,13 +1,15 @@
 <template lang="pug">
-label(for="rotation-speed") Rotation speed:
-input#rotation-speed(
-  v-model.number="rotationSpeed",
-  name="rotation-speed",
-  type="number",
-  placeholder="0.001",
-  step="0.0001"
-)
-#canvas
+.flex.flex-col
+  #canvas
+  .mt-2
+    label(for="rotation-speed") Rotation speed:
+    input#rotation-speed.ml-2.bg-true-gray-100.text-dark-900.border.border-purple-500.px-1(
+      v-model.number="rotationSpeed",
+      name="rotation-speed",
+      type="number",
+      placeholder="0.001",
+      step="0.0001"
+    )
 </template>
 
 <script lang="ts">
@@ -93,7 +95,7 @@ export default defineComponent({
             });
           });
       },
-      { deep: true }
+      { deep: true, immediate: true }
     );
 
     const ambient: AmbientLight = new AmbientLight(0xffffff, 0.1);
