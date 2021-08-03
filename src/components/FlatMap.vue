@@ -15,8 +15,9 @@ div(:style="{ position: 'relative' }")
 </template>
 
 <script lang="ts">
-import { User } from '@/shared/User';
-import { defineComponent, PropType, Ref, ref } from 'vue';
+import type { User } from '@/shared/User';
+import type { PropType, Ref } from 'vue';
+import { defineComponent, ref } from 'vue';
 
 export default defineComponent({
   name: 'FlatMap',
