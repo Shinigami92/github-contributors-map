@@ -32,7 +32,7 @@
     "vue": "~3.1.5"
   },
   "devDependencies": {
-    "@prettier/plugin-pug": "~1.16.2",
+    "@prettier/plugin-pug": "~1.16.4",
     "@types/node": "~16.4.10",
     "@types/three": "~0.130.1",
     "@typescript-eslint/eslint-plugin": "~4.29.0",

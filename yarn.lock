@@ -163,10 +163,10 @@
   dependencies:
     "@octokit/openapi-types" "^9.4.0"
 
-"@prettier/plugin-pug@~1.16.2":
-  version "1.16.2"
-  resolved "https://registry.yarnpkg.com/@prettier/plugin-pug/-/plugin-pug-1.16.2.tgz#72ff24b901747540f4ff2ae22180c007e3b36519"
-  integrity sha512-OEk4yeZqu4KOB7vsrUONDudaT3YcvHUtscIUwU8//ounBFTcZVLXQW1E5znYw1ljQrIhPWQb8+aGuNbx0ZNmwA==
+"@prettier/plugin-pug@~1.16.4":
+  version "1.16.4"
+  resolved "https://registry.yarnpkg.com/@prettier/plugin-pug/-/plugin-pug-1.16.4.tgz#4219d7065595b2ee7d3ab8ff9907d21f2e038843"
+  integrity sha512-ea9FVBIIiwP3nnluoGKqLQREKiRJ1kYcOXdFhzNru/tAsYyS3as9MvxVOJPbrZlq863AW7Rm9ZeHBBVMKhbRYg==
   dependencies:
     pug-lexer "^5.0.0"
 
