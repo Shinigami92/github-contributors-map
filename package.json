@@ -27,9 +27,9 @@
   "bugs": "https://github.com/Shinigami92/github-contributors-map/issues",
   "license": "MIT",
   "dependencies": {
-    "@octokit/graphql": "~4.6.4",
-    "three": "~0.131.2",
-    "vue": "~3.1.5"
+    "@octokit/graphql": "~4.8.0",
+    "three": "~0.132.0",
+    "vue": "~3.2.0"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "~1.16.2",
