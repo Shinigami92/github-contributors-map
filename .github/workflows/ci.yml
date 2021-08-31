@@ -8,49 +8,48 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        node_version: [16]
-      fail-fast: false
-
-    name: 'Build&Test: node-${{ matrix.node_version }}, ${{ matrix.os }}'
+    runs-on: ubuntu-latest
+    name: 'Build: node-16, ubuntu-latest'
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Set node version to ${{ matrix.node_version }}
-        uses: actions/setup-node@v2
-        with:
-          node-version: ${{ matrix.node_version }}
-
-      - name: Versions
-        run: yarn versions
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build
-        run: yarn build
-
-  lint:
-    runs-on: ubuntu-latest
-    name: 'Lint: node-16, ubuntu-latest'
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
 
       - name: Set node version to 16
         uses: actions/setup-node@v2
         with:
           node-version: 16
 
-      - name: Prepare
+      - name: Fetch cached dependencies
+        uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: |
+            **/.yarn/cache
+            **/node_modules
+          key: node-16-os-ubuntu-latest-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            node-16-os-ubuntu-latest-yarn-
+
+      - name: Versions
         run: |
-          yarn install --frozen-lockfile
-          yarn build
+          echo "yarn: $(yarn --version)"
+          echo "npm : $(npm --version)"
+          echo "node: $(node --version)"
+          echo "process.versions:"
+          yarn node -p process.versions
+
+      - name: Install dependencies
+        run: yarn install --immutable
+
+      - name: Build
+        run: yarn build
 
       - name: Lint
         run: yarn lint
+
+      - name: Audit production
+        run: yarn npm audit --all --recursive --environment production
+
+      - name: Audit all
+        continue-on-error: true
+        run: yarn npm audit --all --recursive
