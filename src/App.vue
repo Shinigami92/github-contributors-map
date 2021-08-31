@@ -188,7 +188,9 @@ export default defineComponent({
         collaborators.value = users;
       } catch (error) {
         console.error(error);
-        errorMessage.value = error.message;
+        if (error instanceof Error) {
+          errorMessage.value = error.message;
+        }
       }
     };
 
@@ -209,7 +211,9 @@ export default defineComponent({
         repositories.value = response.search.nodes.map((node) => node.nameWithOwner);
       } catch (error) {
         console.error(error);
-        errorMessage.value = error.message;
+        if (error instanceof Error) {
+          errorMessage.value = error.message;
+        }
       }
     });
 
