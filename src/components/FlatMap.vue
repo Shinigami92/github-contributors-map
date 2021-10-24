@@ -4,7 +4,7 @@
     src="https://upload.wikimedia.org/wikipedia/commons/8/83/Equirectangular_projection_SW.jpg",
     :style="{ width: `${width}px`, height: `${height}px` }"
   )
-  template(v-for="user in users")
+  template(v-for="user in users", :key="user.id")
     img.absolute(
       v-if="user.geolocation",
       :src="user.avatarUrl",

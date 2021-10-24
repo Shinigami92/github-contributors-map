@@ -33,7 +33,7 @@
             list="repositories"
           )
           datalist#repositories
-            option(v-for="repository in repositories") {{ repository }}
+            option(v-for="repository in repositories", :key="repository") {{ repository }}
         div
           select.ml-2.bg-true-gray-100.text-dark-900.border.border-purple-500.px-1(v-model="mode")
             option(value="2D") 2D

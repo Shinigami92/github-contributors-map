@@ -50,6 +50,7 @@
     "eslint-plugin-import": "~2.25.2",
     "eslint-plugin-prettier": "~4.0.0",
     "eslint-plugin-vue": "~7.20.0",
+    "eslint-plugin-vue-pug-sfc": "~1.0.0-alpha.17",
     "esno": "~0.10.1",
     "prettier": "~2.4.1",
     "prettier-plugin-organize-imports": "~2.3.4",
