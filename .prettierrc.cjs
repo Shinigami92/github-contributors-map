@@ -1,3 +1,8 @@
+// @ts-check
+
+/**
+ * @type {import('prettier').Options}
+ */
 module.exports = {
   plugins: [require.resolve('@prettier/plugin-pug'), require.resolve('prettier-plugin-organize-imports')],
   arrowParens: 'always',
