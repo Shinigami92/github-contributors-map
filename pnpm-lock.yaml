@@ -41,12 +41,12 @@ devDependencies:
   '@prettier/plugin-pug': 1.17.0_prettier@2.4.1
   '@types/node': 16.11.4
   '@types/three': 0.133.1
-  '@typescript-eslint/eslint-plugin': 5.1.1-alpha.8_df5a9007ea57afa585ea602f130027df
+  '@typescript-eslint/eslint-plugin': 5.1.1-alpha.8_219b93a5bfe0cd598ed69038b57e9f33
   '@typescript-eslint/parser': 5.1.1-alpha.8_eslint@8.1.0+typescript@4.4.4
   '@vitejs/plugin-vue': 1.9.3_vite@2.6.10
   '@vue/compiler-sfc': 3.2.20
   '@vue/eslint-config-prettier': 6.0.0_91df2dbc49a694d3127d896fd063ef53
-  '@vue/eslint-config-typescript': 8.0.0_1ea8e31c9076bee743f9e672f1fba144
+  '@vue/eslint-config-typescript': 8.0.0_9f5192061a0014307c3e70eec9c499f7
   '@windicss/plugin-icons': 1.0.2
   csv-parse: 4.16.3
   eslint: 8.1.0
@@ -235,7 +235,7 @@ packages:
     resolution: {integrity: sha512-5eQEtSCoESnh2FsiLTxE121IiE60hnMqcb435fShf4bpLRjEu1Eoekht23y6zXS9Ts3l+Szu3TARnTsA0GkOkQ==}
     dev: true
 
-  /@typescript-eslint/eslint-plugin/5.1.1-alpha.8_df5a9007ea57afa585ea602f130027df:
+  /@typescript-eslint/eslint-plugin/5.1.1-alpha.8_219b93a5bfe0cd598ed69038b57e9f33:
     resolution: {integrity: sha512-jDYUumFUrQ40hBOmXQdhi0U5A82sMwKTXRBbdSHaHpVgcaJfh4kszYH19nHDEcY77qz/rcwE/VMNmtQkKtvkgA==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
@@ -445,7 +445,7 @@ packages:
       prettier: 2.4.1
     dev: true
 
-  /@vue/eslint-config-typescript/8.0.0_1ea8e31c9076bee743f9e672f1fba144:
+  /@vue/eslint-config-typescript/8.0.0_9f5192061a0014307c3e70eec9c499f7:
     resolution: {integrity: sha512-8u8Qpg4qfjJoNeRMdHlxif9BcGy4iYSSK4YYW5AFPPRtkBJiCqtoyT72l4F3ZeZII09ax2N6yQeHbQ0CXQi1bA==}
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
@@ -454,7 +454,7 @@ packages:
       eslint: ^6.2.0 || ^7.0.0 || ^8.0.0
       eslint-plugin-vue: ^7.17.0
     dependencies:
-      '@typescript-eslint/eslint-plugin': 5.1.1-alpha.8_df5a9007ea57afa585ea602f130027df
+      '@typescript-eslint/eslint-plugin': 5.1.1-alpha.8_219b93a5bfe0cd598ed69038b57e9f33
       '@typescript-eslint/parser': 5.1.1-alpha.8_eslint@8.1.0+typescript@4.4.4
       eslint: 8.1.0
       eslint-plugin-vue: 7.20.0_eslint@8.1.0
