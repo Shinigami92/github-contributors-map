@@ -4,7 +4,7 @@
   "description": "A world map that shows contributors of a given GitHub repository",
   "private": true,
   "scripts": {
-    "clean": "rm -Rf yarn.lock node_modules",
+    "clean": "rm -Rf pnpm-lock.yaml node_modules",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview --base /github-contributors-map/",
     "serve": "vite",

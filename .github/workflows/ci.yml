@@ -14,42 +14,36 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 6
+
       - name: Set node version to 16
         uses: actions/setup-node@v2
         with:
           node-version: 16
-
-      - name: Fetch cached dependencies
-        uses: actions/cache@v2
-        id: yarn-cache
-        with:
-          path: |
-            **/.yarn/cache
-            **/node_modules
-          key: node-16-os-ubuntu-latest-yarn-${{ hashFiles('**/yarn.lock') }}
-          restore-keys: |
-            node-16-os-ubuntu-latest-yarn-
+          cache: 'pnpm'
 
       - name: Versions
         run: |
-          echo "yarn: $(yarn --version)"
+          echo "pnpm: $(pnpm --version)"
           echo "npm : $(npm --version)"
           echo "node: $(node --version)"
           echo "process.versions:"
-          yarn node -p process.versions
-
+          pnpm node -p process.versions
       - name: Install dependencies
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: yarn build
+        run: pnpm run build
 
       - name: Lint
-        run: yarn lint
+        run: pnpm run lint
 
       - name: Audit production
-        run: yarn npm audit --all --recursive --environment production
+        run: pnpm audit --prod
 
       - name: Audit all
         continue-on-error: true
-        run: yarn npm audit --all --recursive
+        run: pnpm audit
