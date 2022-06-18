@@ -28,7 +28,7 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/graphql": "~4.8.0",
-    "three": "~0.133.1",
+    "three": "~0.141.0",
     "vue": "~3.2.20"
   },
   "devDependencies": {
