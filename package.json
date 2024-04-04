@@ -27,7 +27,7 @@
   "bugs": "https://github.com/Shinigami92/github-contributors-map/issues",
   "license": "MIT",
   "dependencies": {
-    "@octokit/graphql": "~4.8.0",
+    "@octokit/graphql": "~8.1.0",
     "three": "~0.133.1",
     "vue": "~3.2.20"
   },
