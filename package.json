@@ -28,8 +28,8 @@
   "license": "MIT",
   "dependencies": {
     "@octokit/graphql": "~4.8.0",
-    "three": "~0.133.1",
-    "vue": "~3.2.20"
+    "three": "~0.169.0",
+    "vue": "~3.5.0"
   },
   "devDependencies": {
     "@prettier/plugin-pug": "~1.17.0",
